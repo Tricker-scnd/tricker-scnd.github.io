@@ -36,6 +36,10 @@ code {
     font-size: $fs-small;
   }
 
+  @media (max-height: 780px) {
+    padding: $base * 2;
+    font-size: $fs-small;
+  }
   &:active {
     background-color: #777;
   }
@@ -110,6 +114,11 @@ input {
     border-radius: 15px;
     box-shadow: 1px 1px 6px rgba(0, 0, 0, 0.7);
     height: 100%;
+
+    @media (max-height: 780px) {
+      max-height: 620px;
+    }
+
     .main-window__wrapper {
       height: 100%;
       width: 100%;
@@ -128,6 +137,9 @@ input {
   justify-content: space-between;
   box-sizing: border-box;
 
+  @media (max-height: 780px) {
+    padding: $base * 2 $base * 8;
+  }
   @media (max-width: $breakpoint-md-min) {
     padding: $base * 2 $base * 4;
   }
@@ -156,6 +168,17 @@ input {
           display: flex;
           align-items: center;
         }
+
+        @media (max-height: 780px) {
+          font-size: $fs-big;
+          margin-bottom: $base;
+        }
+
+        @media (max-width: 440px) {
+          font-size: 14px;
+          margin: 0;
+        }
+
         &.your-turn {
           color: $color-green;
         }
@@ -195,6 +218,9 @@ input {
     animation: fadeIn 1s;
     padding-top: $base * 6;
     position: relative;
+    @media (max-height: 780px) {
+      padding-top: $base * 1;
+    }
 
     .limit-label {
       position: absolute;
@@ -213,7 +239,14 @@ input {
       margin-top: $base;
       margin-bottom: $base;
     }
+    @media (max-height: 780px) {
+      margin-top: $base;
+      margin-bottom: $base;
+    }
 
+    @media (max-width: 440px) {
+      margin-top: $base * 8;
+    }
     .matches-stats__counter {
       margin-left: $base * 10;
       display: flex;
@@ -431,6 +464,9 @@ input {
   @media (max-width: $breakpoint-md-min) {
     padding-top: 0;
   }
+  @media (max-height: 780px) {
+    padding-top: 0;
+  }
 
   .settings__title {
     color: $color-white;
@@ -554,6 +590,9 @@ input {
   @media (max-width: $breakpoint-md-min) {
     transform: scale(0.6);
   }
+  @media (max-height: 780px) {
+    transform: scale(0.8);
+  }
   i {
     font-style: normal;
 
@@ -564,7 +603,7 @@ input {
       text-shadow: 1px 2px 5px rgba(0, 0, 0, 0.9);
     }
     &:nth-child(2) {
-      margin-top: -15px;
+      margin-top: -18px;
       &::after {
         content: '|';
         font-size: 48px;
@@ -583,10 +622,11 @@ input {
         font-style: normal;
         font-weight: 800;
         font-size: 15px;
+        width: 15px;
         text-shadow: 1px 2px 5px rgba(0, 0, 0, 0.9);
       }
       &:nth-child(2) {
-        margin-top: -10px;
+        margin-top: -12px;
         &::after {
           content: '|';
           font-size: 26px;
@@ -609,7 +649,7 @@ input {
         text-shadow: 1px 2px 5px rgba(0, 0, 0, 0.9);
       }
       &:nth-child(2) {
-        margin-top: -20px;
+        margin-top: -24px;
         &::after {
           content: '|';
           font-size: 64px;
@@ -663,21 +703,3 @@ input {
     transform: rotate(1800deg);
   }
 }
-
-// @keyframes spin {
-//   0% {
-//     transform: rotate(0deg);
-//   }
-//   25% {
-//     transform: rotate(90deg);
-//   }
-//   50% {
-//     transform: rotate(180deg);
-//   }
-//   75% {
-//     transform: rotate(270deg);
-//   }
-//   100% {
-//     transform: rotate(360deg);
-//   }
-// }
