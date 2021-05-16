@@ -1,23 +1,23 @@
 import React from 'react';
+import { GameContextInterface } from '../../context';
 import { GameStatusTypes, GameTurnTypes } from '../../reducer/contracts';
 import { MatchIcon } from '../common/MatchIcon';
 
 interface HeaderProps {
-  gameStatus: GameStatusTypes;
-  gameTurn: GameTurnTypes;
   showSettingsHandler: Function;
+  gameInfo: GameContextInterface['gameInfo'];
 }
 
-export const Header: React.FC<HeaderProps> = ({ gameTurn, showSettingsHandler, gameStatus }) => {
+export const Header: React.FC<HeaderProps> = React.memo(({ showSettingsHandler, gameInfo }) => {
   return (
     <div className="game-header">
       <div className="game-header__title">
-        {gameStatus !== GameStatusTypes.INGAME ? (
+        {gameInfo.gameStatus !== GameStatusTypes.INGAME ? (
           <>
             <h3 className="">Начните играть</h3>
             <MatchIcon size="small" />
           </>
-        ) : gameTurn === GameTurnTypes.ME ? (
+        ) : gameInfo.gameTurn === GameTurnTypes.ME ? (
           <h3 className="your-turn">Ваш ход</h3>
         ) : (
           <h3 className="enemy-turn">
@@ -32,4 +32,4 @@ export const Header: React.FC<HeaderProps> = ({ gameTurn, showSettingsHandler, g
       </div>
     </div>
   );
-};
+});

@@ -1,4 +1,4 @@
-import React, {  useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { GameTurnTypes } from '../../../../../../reducer/contracts';
 import { ChoseList } from '../../../../../common/ChoseList';
 
@@ -26,27 +26,30 @@ export const GameActions: React.FC<GameActionsProps> = ({ matchesInfo, sendChose
     }
   };
 
+  const ChoseCheck = useCallback(
+    (t: number, zero?: boolean) => {
+      if (!isNaN(t))
+        if (
+          t > (zero ? -1 : 0) &&
+          t <= matchesInfo.currentMatchesCount &&
+          t <= matchesInfo.maximumMatchesToChose
+        )
+          return true;
+      return false;
+    },
+    [matchesInfo.maximumMatchesToChose],
+  );
+
+  const typeChosehandler = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const num = Number(e.target.value);
+    ChoseCheck(num, true) && setChoseCount(num);
+  };
+
   const choseApply = () => {
     if (ChoseCheck(choseCount)) {
       sendChose(choseCount);
       setShowChoseLine(false);
     }
-  };
-
-  const ChoseCheck = (t: number, zero?: boolean) => {
-    if (!isNaN(t))
-      if (
-        t > (zero ? -1 : 0) &&
-        t <= matchesInfo.currentMatchesCount &&
-        t <= matchesInfo.maximumMatchesToChose
-      )
-        return true;
-    return false;
-  };
-
-  const typeChosehandler = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const num = Number(e.target.value);
-    ChoseCheck(num, true) && setChoseCount(num);
   };
 
   return (

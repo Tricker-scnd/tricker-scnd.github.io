@@ -1,12 +1,17 @@
 import { ActionTypes, GameActions } from './actions';
-import { GameResultTypes, GameState, GameStatusTypes, GameTurnTypes } from './contracts';
+import {
+  GameResultTypes,
+  GameState,
+  GameStatusTypes,
+  GameTurnTypes,
+  PlayersTypes,
+} from './contracts';
 
 export const defaultGameState: GameState = {
   gameResult: GameResultTypes.NEVER,
   gameStatus: GameStatusTypes.PREPARE,
   gameTurn: GameTurnTypes.NEVER,
   game: {
-    currentMatchesCount: 25,
     player: 0,
     bot: 0,
     playerLog: [],
@@ -19,9 +24,17 @@ export const defaultGameState: GameState = {
   },
 };
 
-export default function reducer(state: GameState = defaultGameState, action: GameActions) {
+export default function reducer(state: GameState, action: GameActions) {
+
   switch (action.type) {
     case ActionTypes.CHANGE_GAME_STATUS:
+      if (action.payload === GameStatusTypes.INGAME)
+        return {
+          ...state,
+          gameStatus: action.payload,
+          gameTurn: state.settings.firstTurn,
+        };
+
       return {
         ...state,
         gameStatus: action.payload,
@@ -29,6 +42,7 @@ export default function reducer(state: GameState = defaultGameState, action: Gam
     case ActionTypes.CHANGE_GAME_RESULT:
       return {
         ...state,
+        gameStatus: GameStatusTypes.FINISHED,
         gameResult: action.payload,
       };
 
@@ -47,35 +61,62 @@ export default function reducer(state: GameState = defaultGameState, action: Gam
       };
 
     case ActionTypes.APPLY_MATCHES_CHOSE:
-      return {
-        ...state,
-        game: {
-          ...state.game,
-          player: state.game.player + action.payload,
-          playerLog: [...state.game.playerLog, `Взял ${action.payload}`],
-          currentMatchesCount: state.game.currentMatchesCount - action.payload,
-        },
+      const { num, player } = action.payload as { num: number; player: PlayersTypes };
+      
+      const changes = {
+        gameResult: state.gameResult,
+        gameStatus: state.gameStatus,
+        gameTurn: state.gameTurn,
+
+        playerScore: state.game.player,
+        botScore: state.game.bot,
+
+        playerLog: [...state.game.playerLog],
+        botLog: [...state.game.botLog],
       };
 
-    case ActionTypes.BOT_CHOSE:
+      if (player === PlayersTypes.PLAYER) {
+        changes.playerScore = state.game.player + action.payload.num;
+        changes.playerLog = [...state.game.playerLog, `Взял ${num}`];
+        changes.gameTurn = GameTurnTypes.ENEMY;
+      } else if (player === PlayersTypes.BOT) {
+        changes.botScore = state.game.bot + action.payload.num;
+        changes.botLog = [...state.game.botLog, `Взял ${num}`];
+        changes.gameTurn = GameTurnTypes.ME;
+      }
+
+      if (state.settings.totalMatches - changes.playerScore - changes.botScore <= 0) {
+        changes.gameStatus = GameStatusTypes.FINISHED;
+        if (changes.playerScore % 2 === 0) {
+          changes.gameResult = GameResultTypes.WIN;
+        } else {
+          changes.gameResult = GameResultTypes.LOSE;
+        }
+      }
+
       return {
         ...state,
+        gameStatus: changes.gameStatus,
+        gameTurn: changes.gameTurn,
+        gameResult: changes.gameResult,
         game: {
-          ...state.game,
-          bot: state.game.bot + action.payload,
-          botLog: [...state.game.botLog, `Взял ${action.payload}`],
-          currentMatchesCount: state.game.currentMatchesCount - action.payload,
+          player: changes.playerScore,
+          playerLog: changes.playerLog,
+          bot: changes.botScore,
+          botLog: changes.botLog,
         },
       };
 
     case ActionTypes.RESTART_GAME:
       return {
-        ...defaultGameState,
+        gameResult: GameResultTypes.NEVER,
         gameStatus: GameStatusTypes.INGAME,
         gameTurn: state.settings.firstTurn,
         game: {
-          ...defaultGameState.game,
-          currentMatchesCount: state.settings.totalMatches,
+          player: 0,
+          bot: 0,
+          playerLog: [],
+          botLog: [],
         },
         settings: {
           ...state.settings,

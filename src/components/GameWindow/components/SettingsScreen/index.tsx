@@ -1,6 +1,5 @@
-import React, { useContext, useState } from 'react';
-import { ContextState, GameContext } from '../../../../context';
-import { restartGame, settingsApply } from '../../../../reducer/actions';
+import React, { useCallback, useContext, useState } from 'react';
+import { GameContext } from '../../../../context';
 import { GameStatusTypes, GameTurnTypes } from '../../../../reducer/contracts';
 import { SwitchButton } from '../../../common/SwitchButton';
 import { SettingRow } from './components/SettingRow';
@@ -10,15 +9,16 @@ interface SettingsScreenProps {
 }
 
 export const SettingsScreen: React.FC<SettingsScreenProps> = ({ showSettingsHandler }) => {
-  const { state, dispatch } = useContext(GameContext) as ContextState;
+  const { useGameContext } = useContext(GameContext);
+  const { handlers, matchesInfo, gameInfo } = useGameContext;
 
   const [errors, setErrors] = useState('');
-  const [totalMatches, setTotalMatches] = useState<number>(state.settings.totalMatches);
+  const [totalMatches, setTotalMatches] = useState<number>(matchesInfo.totalMatches);
   const [maximumMatchesToChose, setMaximumMatchesToChose] = useState<number>(
-    state.settings.maximumMatchesToChose,
+    matchesInfo.maximumMatchesToChose,
   );
   const [firstTurn, setFirstTurn] = useState<GameTurnTypes.ME | GameTurnTypes.ENEMY>(
-    state.settings.firstTurn,
+    gameInfo.firstTurn,
   );
 
   const totalAmountHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -30,35 +30,28 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({ showSettingsHand
     if (!isNaN(num)) num < totalMatches && setMaximumMatchesToChose(num);
   };
 
-  const applySettings = () => {
+  const applySettings = useCallback(() => {
     if (maximumMatchesToChose + 1 >= totalMatches) {
       setErrors('Выбор спичек за ход, должен быть значительно меньше!');
       return;
     }
-    if (maximumMatchesToChose < 2) {
-      setErrors('Минимальное количество на выбор 2');
+    if (maximumMatchesToChose < 3) {
+      setErrors('Минимальное количество на выбор 3');
       return;
     }
-    if (totalMatches < 5) {
-      setErrors('Минимальное количество 5 спичек');
+    if (totalMatches < 25) {
+      setErrors('Минимальное количество 25 спичек');
       return;
     }
     if (totalMatches % 2 === 0) {
       setErrors('Максимальное количество спичек должно быть нечетным');
       return;
     }
-
     setErrors('');
-    dispatch(
-      settingsApply({
-        totalMatches,
-        maximumMatchesToChose,
-        firstTurn,
-      }),
-    );
-    dispatch(restartGame());
+    handlers.settingsApplyHandler(totalMatches, maximumMatchesToChose, firstTurn);
+    handlers.restartGameHandler();
     showSettingsHandler(false);
-  };
+  }, [totalMatches, maximumMatchesToChose, firstTurn]);
 
   return (
     <div className="game-settings__wrapper">
@@ -93,7 +86,7 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({ showSettingsHand
       </div>
       <div className="settings__footer">
         <button className="btn btn--white" onClick={applySettings}>
-          Применить {state.gameStatus !== GameStatusTypes.PREPARE && ' и начать заново'}
+          Применить {gameInfo.gameStatus !== GameStatusTypes.PREPARE && ' и начать заново'}
         </button>
       </div>
     </div>

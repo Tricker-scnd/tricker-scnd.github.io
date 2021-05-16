@@ -16,16 +16,16 @@ export enum GameTurnTypes {
   NEVER = 'NEVER',
 }
 
-// export interface PlayerState {
-//   matchesCount: number;
-// }
+export enum PlayersTypes {
+  PLAYER = 'PLAYER',
+  BOT = 'BOT',
+}
 
 export interface GameState {
   gameStatus: GameStatusTypes;
   gameResult: GameResultTypes;
   gameTurn: GameTurnTypes;
   game: {
-    currentMatchesCount: number;
     player: number;
     bot: number;
     playerLog: string[];

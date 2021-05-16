@@ -1,29 +1,21 @@
-import React from 'react';
+import React, { useContext } from 'react';
+import { GameContext } from '../../../../context';
 import { GameResultTypes, GameStatusTypes } from '../../../../reducer/contracts';
 
-interface DefaultScreenProps {
-  gameStatusHandler: (s: GameStatusTypes) => void;
-  restartGameHandler: () => void;
-  status: GameStatusTypes;
-  result: GameResultTypes;
-}
+export const DefaultScreen: React.FC = () => {
+  const { useGameContext } = useContext(GameContext);
+  const { handlers, gameInfo } = useGameContext;
 
-export const DefaultScreen: React.FC<DefaultScreenProps> = ({
-  gameStatusHandler,
-  restartGameHandler,
-  status,
-  result,
-}) => {
   return (
     <div className="game-prepare__wrapper">
-      {status === GameStatusTypes.PREPARE ? (
-        <button className="btn" onClick={() => gameStatusHandler(GameStatusTypes.INGAME)}>
+      {gameInfo.gameStatus === GameStatusTypes.PREPARE ? (
+        <button className="btn" onClick={() => handlers.gameStatusHandler(GameStatusTypes.INGAME)}>
           Начать игру
         </button>
       ) : (
-        status === GameStatusTypes.FINISHED && (
+        gameInfo.gameStatus === GameStatusTypes.FINISHED && (
           <div className="game-result__container">
-            {result === GameResultTypes.WIN ? (
+            {gameInfo.gameResult === GameResultTypes.WIN ? (
               <h3 className="win">Победа !</h3>
             ) : (
               <h3 className="lose">Поражение</h3>
@@ -31,8 +23,8 @@ export const DefaultScreen: React.FC<DefaultScreenProps> = ({
             <button
               className="btn"
               onClick={() => {
-                gameStatusHandler(GameStatusTypes.INGAME);
-                restartGameHandler();
+                handlers.gameStatusHandler(GameStatusTypes.INGAME);
+                handlers.restartGameHandler();
               }}>
               Начать заново
             </button>

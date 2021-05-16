@@ -1,21 +1,20 @@
-import React from 'react';
-import { GameState, GameStatusTypes } from '../../reducer/contracts';
+import React, { useContext } from 'react';
+import { GameContext } from '../../context';
+import { GameStatusTypes } from '../../reducer/contracts';
 import { PlayerStatsBlock } from './PlayerStatsBlock';
 
-interface PlayersProps {
-  status: GameStatusTypes;
-  gameStats: GameState['game'];
-}
+export const Players: React.FC = React.memo(() => {
+  const { useGameContext } = useContext(GameContext);
+  const { gameInfo, playersInfo } = useGameContext;
 
-export const Players: React.FC<PlayersProps> = ({ status, gameStats }) => {
   return (
     <div className="players-container">
-      {status !== GameStatusTypes.PREPARE && (
+      {gameInfo.gameStatus !== GameStatusTypes.PREPARE && (
         <>
-          <PlayerStatsBlock count={gameStats.player} playerLog={gameStats.playerLog} />
-          <PlayerStatsBlock count={gameStats.bot} playerLog={gameStats.botLog} oponent />
+          <PlayerStatsBlock count={playersInfo.playerScore} playerLog={playersInfo.playerLog} />
+          <PlayerStatsBlock count={playersInfo.botScore} playerLog={playersInfo.botLog} oponent />
         </>
       )}
     </div>
   );
-};
+});

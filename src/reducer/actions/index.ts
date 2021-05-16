@@ -1,4 +1,10 @@
-import { GameResultTypes, GameState, GameStatusTypes, GameTurnTypes } from '../contracts';
+import {
+  GameResultTypes,
+  GameState,
+  GameStatusTypes,
+  GameTurnTypes,
+  PlayersTypes,
+} from '../contracts';
 
 export enum ActionTypes {
   CHANGE_GAME_STATUS = 'CHANGE_GAME_STATUS',
@@ -6,7 +12,6 @@ export enum ActionTypes {
   CHANGE_GAME_TURN = 'CHANGE_GAME_TURN',
   APPLY_SETTINGS = 'APPLY_SETTINGS',
   APPLY_MATCHES_CHOSE = 'APPLY_MATCHES_CHOSE',
-  BOT_CHOSE = 'BOT_CHOSE',
   RESTART_GAME = 'RESTART_GAME',
 }
 
@@ -44,17 +49,10 @@ export const settingsApply = (payload: GameState['settings']) => {
   };
 };
 
-export const applyMatchesChose = (payload: number) => {
+export const applyMatchesChose = (num: number, player: PlayersTypes) => {
   return {
     type: ActionTypes.APPLY_MATCHES_CHOSE,
-    payload: payload,
-  };
-};
-
-export const botMatchesChose = (payload: number) => {
-  return {
-    type: ActionTypes.BOT_CHOSE,
-    payload: payload,
+    payload: { num, player },
   };
 };
 

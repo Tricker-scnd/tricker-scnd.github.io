@@ -31,15 +31,20 @@ code {
   background-color: $color-bg;
   color: $color-white;
 
+  @media (max-height: 780px) {
+    padding: $base * 2;
+    font-size: $fs-small;
+  }
   @media (max-width: $breakpoint-md-min) {
     padding: $base * 2;
     font-size: $fs-small;
   }
 
-  @media (max-height: 780px) {
-    padding: $base * 2;
-    font-size: $fs-small;
+  @media (max-width: 540px) {
+    padding: $base * 1 $base * 2;
+    font-size: 12px;
   }
+
   &:active {
     background-color: #777;
   }
@@ -196,6 +201,10 @@ input {
     box-shadow: 1px 1px 6px rgba(0, 0, 0, 0.05);
     box-sizing: border-box;
     position: relative;
+
+    @media (max-width: 540px) {
+      flex-basis: 70%;
+    }
   }
 
   .game-prepare__wrapper {
@@ -357,6 +366,11 @@ input {
     @media (max-width: $breakpoint-md-min) {
       padding-top: $base * 2;
     }
+
+    @media (max-width: 540px) {
+      flex-basis: 20%;
+    }
+
     &__column {
       width: 48%;
       height: 100%;
@@ -378,6 +392,10 @@ input {
 
         &.oponent {
           color: $color-lightRed;
+        }
+
+        @media (max-width: 540px) {
+          font-size: 13px;
         }
       }
     }
@@ -414,6 +432,10 @@ input {
         background-color: rgb(201, 201, 201);
         padding: $base $base * 3;
 
+        @media (max-width: 540px) {
+          padding: $base $base * 1;
+        }
+
         .player-stats__action {
           font-size: 16px;
           margin-bottom: $base;
@@ -423,6 +445,10 @@ input {
           text-align: center;
           border-bottom: 1px solid rgba(51, 51, 51, 0.1);
           padding-bottom: 2px;
+
+          @media (max-width: 540px) {
+            font-size: 10px;
+          }
         }
 
         &::-webkit-scrollbar {
@@ -528,6 +554,12 @@ input {
           @media (max-width: $breakpoint-md-min) {
             width: 60px;
           }
+
+          @media (max-width: 540px) {
+            width: 50px;
+            font-size: 12px;
+            padding: $base $base * 2;
+          }
         }
 
         @media (max-width: $breakpoint-md-min) {
@@ -587,11 +619,15 @@ input {
   font-style: normal;
   flex-direction: column;
   align-items: center;
+  @media (max-height: 780px) {
+    transform: scale(0.8);
+  }
   @media (max-width: $breakpoint-md-min) {
     transform: scale(0.6);
   }
-  @media (max-height: 780px) {
-    transform: scale(0.8);
+
+  @media (max-width: 540px) {
+    transform: scale(0.5);
   }
   i {
     font-style: normal;
