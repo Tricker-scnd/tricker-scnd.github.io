@@ -75,7 +75,7 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({ showSettingsHand
 
         <SettingRow title="Максимальное количество спичек" titleHint="только нечетное число">
           <input type="text" value={totalMatches} onChange={totalAmountHandler} />
-          <span className="input-hint">max:1000</span>
+          <span className="input-hint">max:999</span>
         </SettingRow>
 
         <SettingRow title="Максимум спичек можно взять за ход">

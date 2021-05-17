@@ -53,7 +53,7 @@ export default function useGame() {
 
       //игра при стандартных настройках
       if (gameInfo.firstTurn === GameTurnTypes.ENEMY) {
-        num = randomInteger(matchesInfo.currentMatchesCount, matchesInfo.maximumMatchesToChose);
+        num = randomInteger(1, matchesInfo.maximumMatchesToChose);
       } else
         num = numWithModClassic(matchesInfo.currentMatchesCount, matchesInfo.maximumMatchesToChose);
       handlers.botChoseHandler(num);

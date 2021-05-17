@@ -7,7 +7,7 @@ export const isEven = (n: number) => {
 
 export const numWithModClassic = (current: number, max: number) => {
   // цель оставить число спичек, сравнимое с 0 или 1 по модулю 4.
-  let modZero = 0;
+  let modZero = 1;
   let modDelimetr = 4;
 
   for (let num = 1; num <= max; num++) {
